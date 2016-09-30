@@ -21,46 +21,86 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 
 package org.ashakiran.webapp.taglib;
 
 import javax.servlet.jsp.tagext.TagSupport;
+
 import org.ashakiran.webapp.jsp.EscapeXmlELResolver;
+
 
 /**
  * Tag surrounds JSP code in which EL expressions should not be XML-escaped.
+ *
+ * @author   $author$
+ * @version  $Revision$, $Date$
  */
 public class OutTag extends TagSupport {
-    private static final long serialVersionUID = 1L;
+  //~ Static fields/initializers ---------------------------------------------------------------------------------------
 
-    private static final boolean ESCAPE_XML_DEFAULT = true;
-    private boolean escapeXml;
-    
-    public OutTag() {
-        release();
-    }
-    
-    public void setEscapeXml(boolean escapeXml) {
-        this.escapeXml = escapeXml;
-    }
-    
-    @Override
-    public int doStartTag() {
-        pageContext.setAttribute(
-                EscapeXmlELResolver.ESCAPE_XML_ATTRIBUTE, escapeXml);
-        return EVAL_BODY_INCLUDE;
-    }
-    
-    @Override
-    public int doEndTag() {
-        pageContext.setAttribute(
-                EscapeXmlELResolver.ESCAPE_XML_ATTRIBUTE, ESCAPE_XML_DEFAULT);
-        return EVAL_PAGE;
-    }
-    
-    @Override
-    public void release() {
-        escapeXml = ESCAPE_XML_DEFAULT;
-    }
-}
+  private static final long serialVersionUID = 1L;
+
+  private static final boolean ESCAPE_XML_DEFAULT = true;
+
+  //~ Instance fields --------------------------------------------------------------------------------------------------
+
+  private boolean escapeXml;
+
+  //~ Constructors -----------------------------------------------------------------------------------------------------
+
+  /**
+   * Creates a new OutTag object.
+   */
+  public OutTag() {
+    release();
+  }
+
+  //~ Methods ----------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return  DOCUMENT ME!
+   */
+  @Override public int doEndTag() {
+    pageContext.setAttribute(
+      EscapeXmlELResolver.ESCAPE_XML_ATTRIBUTE, ESCAPE_XML_DEFAULT);
+
+    return EVAL_PAGE;
+  }
+
+  //~ ------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return  DOCUMENT ME!
+   */
+  @Override public int doStartTag() {
+    pageContext.setAttribute(
+      EscapeXmlELResolver.ESCAPE_XML_ATTRIBUTE, escapeXml);
+
+    return EVAL_BODY_INCLUDE;
+  }
+
+  //~ ------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   */
+  @Override public void release() {
+    escapeXml = ESCAPE_XML_DEFAULT;
+  }
+
+  //~ ------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param  escapeXml  DOCUMENT ME!
+   */
+  public void setEscapeXml(boolean escapeXml) {
+    this.escapeXml = escapeXml;
+  }
+} // end class OutTag

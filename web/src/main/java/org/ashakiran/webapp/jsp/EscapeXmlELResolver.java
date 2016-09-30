@@ -21,87 +21,151 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 package org.ashakiran.webapp.jsp;
+
+import java.beans.FeatureDescriptor;
+
+import java.util.Iterator;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
+
 import javax.servlet.jsp.JspContext;
-import java.beans.FeatureDescriptor;
-import java.util.Iterator;
+
 
 /**
  * {@link javax.el.ELResolver} which escapes XML in String values.
+ *
+ * @author   $author$
+ * @version  $Revision$, $Date$
  */
 public class EscapeXmlELResolver extends ELResolver {
+  //~ Static fields/initializers ---------------------------------------------------------------------------------------
 
-    /**
-     * pageContext attribute name for flag to enable XML escaping
-     */
-    public static final String ESCAPE_XML_ATTRIBUTE =
-            EscapeXmlELResolver.class.getName() + ".escapeXml";
+  /** pageContext attribute name for flag to enable XML escaping. */
+  public static final String ESCAPE_XML_ATTRIBUTE = EscapeXmlELResolver.class.getName() + ".escapeXml";
 
-    private ThreadLocal<Boolean> excludeMe = new ThreadLocal<Boolean>() {
-        @Override
-        protected Boolean initialValue() {
-            return Boolean.FALSE;
-        }
-    };
+  //~ Instance fields --------------------------------------------------------------------------------------------------
 
-    @Override
-    public Class<?> getCommonPropertyType(ELContext context, Object base) {
+  private ThreadLocal<Boolean> excludeMe = new ThreadLocal<Boolean>() {
+    @Override protected Boolean initialValue() {
+      return Boolean.FALSE;
+    }
+  };
+
+  //~ Methods ----------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param   context  DOCUMENT ME!
+   * @param   base     DOCUMENT ME!
+   *
+   * @return  DOCUMENT ME!
+   */
+  @Override public Class<?> getCommonPropertyType(ELContext context, Object base) {
+    return null;
+  }
+
+  //~ ------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param   context  DOCUMENT ME!
+   * @param   base     DOCUMENT ME!
+   *
+   * @return  DOCUMENT ME!
+   */
+  @Override public Iterator<FeatureDescriptor> getFeatureDescriptors(
+    ELContext context, Object base) {
+    return null;
+  }
+
+  //~ ------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param   context   DOCUMENT ME!
+   * @param   base      DOCUMENT ME!
+   * @param   property  DOCUMENT ME!
+   *
+   * @return  DOCUMENT ME!
+   */
+  @Override public Class<?> getType(ELContext context, Object base, Object property) {
+    return null;
+  }
+
+  //~ ------------------------------------------------------------------------------------------------------------------
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param   context   DOCUMENT ME!
+   * @param   base      DOCUMENT ME!
+   * @param   property  DOCUMENT ME!
+   *
+   * @return  DOCUMENT ME!
+   */
+  @Override public Object getValue(ELContext context, Object base, Object property) {
+    JspContext pageContext = (JspContext) context.getContext(JspContext.class);
+    Boolean    escapeXml   = (Boolean) pageContext.getAttribute(ESCAPE_XML_ATTRIBUTE);
+
+    if ((escapeXml != null) && !escapeXml) {
+      return null;
+    }
+
+    try {
+      if (excludeMe.get()) {
         return null;
+      }
+
+      // This resolver is in the original resolver chain. To prevent
+      // infinite recursion, set a flag to prevent this resolver from
+      // invoking the original resolver chain again when its turn in the
+      // chain comes around.
+      excludeMe.set(Boolean.TRUE);
+
+      Object value = context.getELResolver().getValue(
+          context, base, property);
+
+      if (value instanceof String) {
+        value = EscapeXml.escape((String) value);
+      }
+
+      return value;
+
+    } finally {
+      excludeMe.set(Boolean.FALSE);
     }
+  } // end method getValue
 
-    @Override
-    public Iterator<FeatureDescriptor> getFeatureDescriptors(
-            ELContext context, Object base) {
-        return null;
-    }
+  //~ ------------------------------------------------------------------------------------------------------------------
 
-    @Override
-    public Class<?> getType(ELContext context, Object base, Object property) {
-        return null;
-    }
+  /**
+   * DOCUMENT ME!
+   *
+   * @param   context   DOCUMENT ME!
+   * @param   base      DOCUMENT ME!
+   * @param   property  DOCUMENT ME!
+   *
+   * @return  DOCUMENT ME!
+   */
+  @Override public boolean isReadOnly(ELContext context, Object base, Object property) {
+    return false;
+  }
 
-    @Override
-    public Object getValue(ELContext context, Object base, Object property) {
-        JspContext pageContext = (JspContext) context.getContext(JspContext.class);
-        Boolean escapeXml = (Boolean) pageContext.getAttribute(ESCAPE_XML_ATTRIBUTE);
-        if (escapeXml != null && !escapeXml) {
-            return null;
-        }
+  //~ ------------------------------------------------------------------------------------------------------------------
 
-        try {
-            if (excludeMe.get()) {
-                return null;
-            }
-
-            // This resolver is in the original resolver chain. To prevent
-            // infinite recursion, set a flag to prevent this resolver from
-            // invoking the original resolver chain again when its turn in the
-            // chain comes around.
-            excludeMe.set(Boolean.TRUE);
-            Object value = context.getELResolver().getValue(
-                    context, base, property);
-
-            if (value instanceof String) {
-                value = EscapeXml.escape((String) value);
-            }
-            return value;
-
-        } finally {
-            excludeMe.set(Boolean.FALSE);
-        }
-    }
-
-    @Override
-    public boolean isReadOnly(ELContext context, Object base, Object property) {
-        return false;
-    }
-
-    @Override
-    public void setValue(ELContext context, Object base, Object property, Object value) {
-
-    }
-}
+  /**
+   * DOCUMENT ME!
+   *
+   * @param  context   DOCUMENT ME!
+   * @param  base      DOCUMENT ME!
+   * @param  property  DOCUMENT ME!
+   * @param  value     DOCUMENT ME!
+   */
+  @Override public void setValue(ELContext context, Object base, Object property, Object value) { }
+} // end class EscapeXmlELResolver

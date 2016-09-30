@@ -1,21 +1,24 @@
 package org.ashakiran.dao;
 
-import org.ashakiran.model.Role;
-
 import java.util.List;
 
+import org.ashakiran.model.Role;
+
+
 /**
- * Lookup Data Access Object (GenericDao) interface.  This is used to lookup values in
- * the database (i.e. for drop-downs).
+ * Lookup Data Access Object (GenericDao) interface. This is used to lookup values in the database (i.e. for
+ * drop-downs).
  *
- * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
+ * @author   <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
+ * @version  $Revision$, $Date$
  */
 public interface LookupDao {
-    //~ Methods ================================================================
+  //~ Methods ----------------------------------------------------------------------------------------------------------
 
-    /**
-     * Returns all Roles ordered by name
-     * @return populated list of roles
-     */
-    List<Role> getRoles();
+  /**
+   * Returns all Roles ordered by name.
+   *
+   * @return  populated list of roles
+   */
+  List<Role> getRoles();
 }

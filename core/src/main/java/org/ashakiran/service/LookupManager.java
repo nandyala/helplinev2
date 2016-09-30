@@ -1,19 +1,23 @@
 package org.ashakiran.service;
 
-import org.ashakiran.model.LabelValue;
-
 import java.util.List;
 
+import org.ashakiran.model.LabelValue;
+
+
 /**
- * Business Service Interface to talk to persistence layer and
- * retrieve values for drop-down choice lists.
+ * Business Service Interface to talk to persistence layer and retrieve values for drop-down choice lists.
  *
- * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
+ * @author   <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
+ * @version  $Revision$, $Date$
  */
 public interface LookupManager {
-    /**
-     * Retrieves all possible roles from persistence layer
-     * @return List of LabelValue objects
-     */
-    List<LabelValue> getAllRoles();
+  //~ Methods ----------------------------------------------------------------------------------------------------------
+
+  /**
+   * Retrieves all possible roles from persistence layer.
+   *
+   * @return  List of LabelValue objects
+   */
+  List<LabelValue> getAllRoles();
 }

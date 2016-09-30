@@ -1,13 +1,21 @@
 package org.ashakiran.dao;
 
 /**
+ * DOCUMENT ME!
  *
- * @author jgarcia
+ * @author   jgarcia
+ * @version  $Revision$, $Date$
  */
 public class SearchException extends RuntimeException {
+  //~ Constructors -----------------------------------------------------------------------------------------------------
 
-    public SearchException(Throwable ex) {
-        super(ex);
-    }
+  /**
+   * Creates a new SearchException object.
+   *
+   * @param  ex  DOCUMENT ME!
+   */
+  public SearchException(Throwable ex) {
+    super(ex);
+  }
 
 }
