@@ -1,0 +1,14 @@
+*.class
+.mtj.tmp/
+*.jar
+*.war
+*.ear
+*.iml
+hs_err_pid*
+.gradle
+build
+.idea
+**/*.log
+*/target/*
+.DS_Store
+atlassian-ide-plugin.xml
